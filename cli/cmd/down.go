@@ -7,7 +7,7 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/solrac97gr/infrastructure/infracli/config"
+	"github.com/solrac97gr/infrastructure/cli/config"
 	"github.com/spf13/cobra"
 )
 
@@ -46,19 +46,17 @@ Examples:
 			return
 		}
 
-		// Determinar la ruta base para los servicios
-		execPath, err := os.Executable()
-		if err != nil {
-			fmt.Fprintf(os.Stderr, "Error getting executable path: %v\n", err)
-			return
-		}
-
-		basePath := filepath.Join(filepath.Dir(execPath), cfg.ServicesPath)
+		// Usar directamente la ruta de servicios configurada
+		basePath := cfg.ServicesPath
 		
-		// Verificar si estamos en desarrollo
-		if _, err := os.Stat(basePath); os.IsNotExist(err) {
-			// En desarrollo, usar ruta relativa al directorio de trabajo
-			basePath = cfg.ServicesPath
+		// Expandir la ruta si contiene ~/
+		if len(basePath) >= 2 && basePath[:2] == "~/" {
+			homeDir, err := os.UserHomeDir()
+			if err != nil {
+				fmt.Fprintf(os.Stderr, "Error getting home directory: %v\n", err)
+				return
+			}
+			basePath = filepath.Join(homeDir, basePath[2:])
 		}
 
 		if verbose {

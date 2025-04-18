@@ -74,19 +74,9 @@ fi
 echo "Installing infracli to $INSTALL_DIR"
 cp infracli "$INSTALL_DIR/"
 
-# Crear directorio de configuración si es necesario
-CONFIG_DIR="/etc/infracli"
-if [ ! -d "$CONFIG_DIR" ] || [ ! -w "$CONFIG_DIR" ]; then
-    CONFIG_DIR="$HOME/.config/infracli"
-    mkdir -p "$CONFIG_DIR"
-fi
-
-# Copiar la configuración
-echo "Setting up configuration in $CONFIG_DIR"
-cp -r config/config.json "$CONFIG_DIR/"
-
 echo -e "${GREEN}Installation completed successfully!${NC}"
 echo "You can now use infracli by running: infracli"
+echo "The configuration will be automatically created at ~/.config/infracli/infracli.json on first run"
 echo "Try 'infracli --help' to see available commands"
 
 # Si estamos usando un directorio bin personalizado y es la primera instalación

@@ -44,32 +44,23 @@ if [ "$BINARY_FOUND" = false ]; then
 fi
 
 # Comprobar ubicaciones posibles de la configuración
-POSSIBLE_CONFIG_DIRS=(
-    "/etc/infracli"
-    "$HOME/.config/infracli"
-)
+CONFIG_DIR="$HOME/.config/infracli"
 
-CONFIG_FOUND=false
-for config_dir in "${POSSIBLE_CONFIG_DIRS[@]}"; do
-    if [ -d "$config_dir" ]; then
-        echo "Found infracli configuration at $config_dir"
-        CONFIG_FOUND=true
-        
-        # Solicitar confirmación
-        read -p "Do you want to remove this configuration directory? (y/n) " -n 1 -r
-        echo
-        if [[ $REPLY =~ ^[Yy]$ ]]; then
-            echo "Removing configuration from $config_dir"
-            rm -rf "$config_dir"
-            echo -e "${GREEN}Configuration removed successfully${NC}"
-        else
-            echo "Configuration will not be removed"
-        fi
+if [ -d "$CONFIG_DIR" ]; then
+    echo "Found infracli configuration at $CONFIG_DIR"
+    
+    # Solicitar confirmación
+    read -p "Do you want to remove this configuration directory? (y/n) " -n 1 -r
+    echo
+    if [[ $REPLY =~ ^[Yy]$ ]]; then
+        echo "Removing configuration from $CONFIG_DIR"
+        rm -rf "$CONFIG_DIR"
+        echo -e "${GREEN}Configuration removed successfully${NC}"
+    else
+        echo "Configuration will not be removed"
     fi
-done
-
-if [ "$CONFIG_FOUND" = false ]; then
-    echo -e "${YELLOW}No infracli configuration found in standard locations${NC}"
+else
+    echo -e "${YELLOW}No infracli configuration found at $CONFIG_DIR${NC}"
 fi
 
 echo -e "${GREEN}Uninstallation process completed!${NC}"

@@ -1,0 +1,8 @@
+{
+  "servicesPath": "./Development/infrastructure/services",
+  "excludedDirs": [
+    "config",
+    "scripts",
+    "cmd"
+  ]
+}

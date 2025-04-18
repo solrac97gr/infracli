@@ -5,7 +5,7 @@ import (
 	"os"
 	"strings"
 
-	"github.com/solrac97gr/infrastructure/infracli/config"
+	"github.com/solrac97gr/infrastructure/cli/config"
 	"github.com/spf13/cobra"
 )
 
