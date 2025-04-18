@@ -4,7 +4,31 @@ This repository contains Docker Compose configurations for various services used
 
 ## Quick Start
 
-You can use the provided script to start one or multiple services at once:
+### Using the CLI Tool (Recommended)
+
+You can use our CLI tool to manage infrastructure services:
+
+```bash
+# Install the CLI tool
+cd infracli
+./scripts/install.sh
+
+# Start services
+infracli run mysql
+infracli run mongo elasticsearch-kibana
+infracli run all
+
+# Stop services
+infracli down mysql
+infracli down all
+
+# List available services
+infracli list
+```
+
+### Using the Shell Script
+
+Alternatively, you can use the provided shell script:
 
 ```bash
 # Start a single service
@@ -134,3 +158,23 @@ All databases are configured with named volumes to persist data between containe
 ## Adding New Infrastructure
 
 Follow the pattern established in the existing directories to add configurations for additional databases as needed.
+
+## InfraCLI Tool
+
+The repository includes a Go-based CLI tool for more efficient service management. Learn more in the [InfraCLI README](infracli/README.md).
+
+### Key Features
+
+- Start and stop services with simple commands
+- Manage multiple services at once
+- Automatic service discovery
+- Proper cleanup with volume removal option
+
+### Installation
+
+```bash
+cd infracli
+./scripts/install.sh
+```
+
+Once installed, you can use `infracli` from anywhere in your system to manage the infrastructure services.
