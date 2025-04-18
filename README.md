@@ -2,6 +2,21 @@
 
 This repository contains Docker Compose configurations for various services used for testing and development environments.
 
+## Quick Start
+
+You can use the provided script to start one or multiple services at once:
+
+```bash
+# Start a single service
+./run.sh mysql
+
+# Start multiple services
+./run.sh mongo elasticsearch-kibana
+
+# Start all available services
+./run.sh all
+```
+
 ## Available Infrastructure
 
 ### MongoDB
@@ -90,6 +105,27 @@ docker-compose up -d
 2. Start the container: `docker-compose up -d`
 3. Connect to the database using the provided connection details
 4. Stop the container when finished: `docker-compose down`
+
+### Using the run.sh Script
+
+The `run.sh` script provides a convenient way to start services:
+
+```bash
+# Display help information
+./run.sh
+
+# Start one or more services
+./run.sh [service1] [service2] ... [serviceN]
+```
+
+To stop services, you'll still need to use the docker-compose command in each service directory:
+
+```bash
+cd [service-directory]
+docker-compose down
+```
+
+A future enhancement could include a stop capability in the script.
 
 ## Data Persistence
 
