@@ -41,6 +41,26 @@ docker-compose up -d
 - **Default Database:** testdb (created automatically)
 - **Connection String:** postgresql://postgres:postgres@localhost:5432/testdb
 
+### MySQL
+
+A complete MySQL setup with data persistence and initialization scripts.
+
+#### Usage
+
+```bash
+cd mysql
+docker-compose up -d
+```
+
+#### Configuration
+
+- **Port:** 3306
+- **Root Password:** rootpassword
+- **Default Database:** testdb
+- **Default User:** mysqluser
+- **Default Password:** mysqlpassword
+- **Connection String:** mysql://mysqluser:mysqlpassword@localhost:3306/testdb
+
 ### Elasticsearch and Kibana
 
 A complete setup for Elasticsearch and Kibana with data persistence.
