@@ -130,6 +130,6 @@ func stopAllServices(services []string, basePath string, removeVolumes, verbose 
 }
 
 func init() {
-	downCmd.Flags().BoolP("volumes", "v", false, "Remove volumes when stopping services")
+	downCmd.Flags().BoolP("volumes", "d", false, "Remove volumes when stopping services")
 	RootCmd.AddCommand(downCmd)
 }

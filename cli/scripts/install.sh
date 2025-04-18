@@ -12,7 +12,7 @@ RED='\033[0;31m'
 NC='\033[0m' # No Color
 
 echo -e "${YELLOW}InfraCLI Installation Script${NC}"
-echo "This script will build and install the infracli tool"
+echo "This script will install the infracli tool"
 
 # Comprobar que Go está instalado
 if ! command -v go &> /dev/null; then
@@ -31,55 +31,20 @@ echo "Detected Go version: $GO_VERSION"
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 PROJECT_DIR="$(dirname "$SCRIPT_DIR")"
 
-echo "Building infracli from $PROJECT_DIR"
+echo "Installing infracli from $PROJECT_DIR"
 
 # Entrar al directorio del proyecto
 cd "$PROJECT_DIR"
 
-# Compilar el proyecto
-echo "Compiling infracli..."
-go build -o infracli
-
-# Determinar el directorio de instalación
-INSTALL_DIR="/usr/local/bin"
-if [[ "$OSTYPE" == "darwin"* ]]; then
-    # macOS
-    if [ ! -d "$INSTALL_DIR" ] || [ ! -w "$INSTALL_DIR" ]; then
-        echo "Installing to ~/bin instead of $INSTALL_DIR due to permissions"
-        INSTALL_DIR="$HOME/bin"
-        mkdir -p "$INSTALL_DIR"
-    fi
-elif [[ "$OSTYPE" == "linux-gnu"* ]]; then
-    # Linux
-    if [ ! -d "$INSTALL_DIR" ] || [ ! -w "$INSTALL_DIR" ]; then
-        echo "Installing to ~/bin instead of $INSTALL_DIR due to permissions"
-        INSTALL_DIR="$HOME/bin"
-        mkdir -p "$INSTALL_DIR"
-        
-        # Verificar si ~/bin está en PATH y añadirlo si no lo está
-        if [[ ":$PATH:" != *":$HOME/bin:"* ]]; then
-            echo 'export PATH="$HOME/bin:$PATH"' >> ~/.bashrc
-            echo "Added $HOME/bin to PATH in ~/.bashrc"
-            
-            # Verificar si también se usa zsh
-            if [ -f "$HOME/.zshrc" ]; then
-                echo 'export PATH="$HOME/bin:$PATH"' >> ~/.zshrc
-                echo "Added $HOME/bin to PATH in ~/.zshrc"
-            fi
-        fi
-    fi
-fi
-
-# Copiar el binario al directorio de instalación
-echo "Installing infracli to $INSTALL_DIR"
-cp infracli "$INSTALL_DIR/"
+# Instalar el proyecto usando go install
+echo "Installing infracli using go install..."
+go install
 
 echo -e "${GREEN}Installation completed successfully!${NC}"
 echo "You can now use infracli by running: infracli"
 echo "The configuration will be automatically created at ~/.config/infracli/infracli.json on first run"
 echo "Try 'infracli --help' to see available commands"
 
-# Si estamos usando un directorio bin personalizado y es la primera instalación
-if [ "$INSTALL_DIR" = "$HOME/bin" ]; then
-    echo -e "${YELLOW}Note: You may need to open a new terminal or run 'source ~/.bashrc' to use infracli${NC}"
-fi
+# Notificar que go install coloca los binarios en GOPATH/bin
+echo -e "${YELLOW}Note: infracli has been installed to your GOPATH/bin directory${NC}"
+echo "Make sure GOPATH/bin is in your PATH environment variable"
