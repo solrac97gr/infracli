@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/solrac97gr/infrastructure/cli/config"
+	"github.com/solrac97gr/infrastructure/infracli/config"
 	"github.com/spf13/cobra"
 )
 
@@ -33,7 +33,7 @@ This command allows you to see the current configuration and where it's stored.`
 		fmt.Printf("Configuration file: %s\n\n", configPath)
 		fmt.Printf("Services path: %s\n", cfg.ServicesPath)
 		fmt.Printf("Excluded directories: %v\n", cfg.ExcludedDirs)
-		
+
 		fmt.Println("\nTo modify the configuration, edit the file directly or use:")
 		fmt.Println("  infracli config set-path <new-services-path>")
 	},

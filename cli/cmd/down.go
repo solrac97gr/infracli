@@ -7,7 +7,7 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/solrac97gr/infrastructure/cli/config"
+	"github.com/solrac97gr/infrastructure/infracli/config"
 	"github.com/spf13/cobra"
 )
 
@@ -31,7 +31,7 @@ Examples:
 		// Verificar si se debe eliminar volúmenes
 		removeVolumes, _ := cmd.Flags().GetBool("volumes")
 		verbose, _ := cmd.Flags().GetBool("verbose")
-		
+
 		// Obtener servicios disponibles
 		availableServices, err := config.GetAvailableServices()
 		if err != nil {
@@ -48,7 +48,7 @@ Examples:
 
 		// Usar directamente la ruta de servicios configurada
 		basePath := cfg.ServicesPath
-		
+
 		// Expandir la ruta si contiene ~/
 		if len(basePath) >= 2 && basePath[:2] == "~/" {
 			homeDir, err := os.UserHomeDir()
@@ -98,15 +98,15 @@ Examples:
 func stopService(service, basePath string, removeVolumes, verbose bool) {
 	servicePath := filepath.Join(basePath, service)
 	fmt.Printf("Stopping %s...\n", service)
-	
+
 	args := []string{"down"}
 	if removeVolumes {
 		args = append(args, "-v")
 	}
-	
+
 	cmd := exec.Command("docker-compose", args...)
 	cmd.Dir = servicePath
-	
+
 	if verbose {
 		cmd.Stdout = os.Stdout
 		cmd.Stderr = os.Stderr
@@ -118,7 +118,7 @@ func stopService(service, basePath string, removeVolumes, verbose bool) {
 			return
 		}
 	}
-	
+
 	fmt.Printf("%s stopped successfully\n", service)
 }
 

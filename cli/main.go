@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/solrac97gr/infrastructure/cli/cmd"
+	"github.com/solrac97gr/infrastructure/infracli/cmd"
 )
 
 func main() {

@@ -7,7 +7,7 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/solrac97gr/infrastructure/cli/config"
+	"github.com/solrac97gr/infrastructure/infracli/config"
 	"github.com/spf13/cobra"
 )
 
@@ -29,7 +29,7 @@ Examples:
 		}
 
 		verbose, _ := cmd.Flags().GetBool("verbose")
-		
+
 		// Obtener servicios disponibles
 		availableServices, err := config.GetAvailableServices()
 		if err != nil {
@@ -46,7 +46,7 @@ Examples:
 
 		// Usar directamente la ruta de servicios configurada
 		basePath := cfg.ServicesPath
-		
+
 		// Expandir la ruta si contiene ~/
 		if len(basePath) >= 2 && basePath[:2] == "~/" {
 			homeDir, err := os.UserHomeDir()
@@ -93,10 +93,10 @@ Examples:
 func runService(service, basePath string, verbose bool) {
 	servicePath := filepath.Join(basePath, service)
 	fmt.Printf("Starting %s...\n", service)
-	
+
 	cmd := exec.Command("docker-compose", "up", "-d")
 	cmd.Dir = servicePath
-	
+
 	if verbose {
 		cmd.Stdout = os.Stdout
 		cmd.Stderr = os.Stderr
@@ -108,7 +108,7 @@ func runService(service, basePath string, verbose bool) {
 			return
 		}
 	}
-	
+
 	fmt.Printf("%s started successfully\n", service)
 }
 
