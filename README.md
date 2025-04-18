@@ -41,6 +41,29 @@ docker-compose up -d
 - **Default Database:** testdb (created automatically)
 - **Connection String:** postgresql://postgres:postgres@localhost:5432/testdb
 
+### Elasticsearch and Kibana
+
+A complete setup for Elasticsearch and Kibana with data persistence.
+
+#### Usage
+
+```bash
+cd elasticsearch-kibana
+docker-compose up -d
+```
+
+#### Configuration
+
+##### Elasticsearch
+- **Port:** 9200
+- **Internal Port:** 9300
+- **Security:** Disabled for development
+- **Connection URL:** http://localhost:9200
+
+##### Kibana
+- **Port:** 5601
+- **Dashboard URL:** http://localhost:5601
+
 ## General Usage
 
 1. Navigate to the directory of the database you need
