@@ -29,6 +29,18 @@ The installation script will compile the CLI tool and install it to your system.
 infracli list
 ```
 
+### Get Service Information
+
+```bash
+# Get connection information for a service
+infracli info mysql
+
+# Get connection details for other services
+infracli info postgres
+infracli info mongo
+infracli info elasticsearch-kibana
+```
+
 ### Start Services
 
 ```bash
