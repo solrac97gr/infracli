@@ -266,6 +266,8 @@ Examples:
 			displayPostgresInfo(composeContent)
 		case "mongo":
 			displayMongoInfo(composeContent)
+		case "redis":
+			displayRedisInfo(composeContent)
 		case "elasticsearch-kibana":
 			displayElasticsearchKibanaInfo(composeContent)
 		default:
@@ -580,6 +582,103 @@ func displayGenericInfo(serviceName string, content string) {
 	fmt.Printf("  infracli run %s\n", serviceName)
 	fmt.Println("\nTo stop this service:")
 	fmt.Printf("  infracli down %s\n", serviceName)
+}
+
+func displayRedisInfo(content string) {
+	// Extract service information
+	services := extractImageAndServices(content)
+	
+	// Find the Redis service
+	var redisServiceName string
+	for name, image := range services {
+		if strings.Contains(strings.ToLower(image), "redis") {
+			redisServiceName = name
+			break
+		}
+	}
+	
+	if redisServiceName == "" {
+		fmt.Println("Redis service not found in docker-compose.yml")
+		return
+	}
+	
+	// Extract ports for Redis service
+	servicePrefix := "  " + redisServiceName + ":"
+	ports := extractPorts(content, servicePrefix)
+	
+	// Find Redis port
+	var port string = "6379" // Default if not specified
+	for _, portMapping := range ports {
+		if strings.Contains(portMapping, "6379") {
+			parts := strings.Split(portMapping, ":")
+			if len(parts) == 2 {
+				port = strings.TrimSpace(parts[0])
+				break
+			}
+		}
+	}
+	
+	// Check if password is configured
+	password := ""
+	requiresAuth := false
+	
+	// Look for password in command line arguments
+	scanner := bufio.NewScanner(strings.NewReader(content))
+	for scanner.Scan() {
+		line := scanner.Text()
+		if strings.Contains(line, "requirepass") {
+			requiresAuth = true
+			parts := strings.Split(line, "requirepass")
+			if len(parts) > 1 {
+				password = strings.TrimSpace(parts[1])
+			}
+			break
+		}
+	}
+	
+	// Display Redis connection information
+	fmt.Println("Redis Connection Information:")
+	fmt.Println(strings.Repeat("-", 40))
+	fmt.Printf("Host: localhost\n")
+	fmt.Printf("Port: %s\n", port)
+	
+	if requiresAuth {
+		fmt.Printf("Password: %s\n", password)
+		fmt.Printf("Authentication: Enabled\n")
+	} else {
+		fmt.Printf("Authentication: Disabled (no password required)\n")
+	}
+	
+	// Check if AOF persistence is enabled
+	persistenceEnabled := false
+	scanner = bufio.NewScanner(strings.NewReader(content))
+	for scanner.Scan() {
+		line := scanner.Text()
+		if strings.Contains(line, "appendonly yes") {
+			persistenceEnabled = true
+			break
+		}
+	}
+	
+	fmt.Printf("Persistence: %s\n", map[bool]string{true: "Enabled (appendonly)", false: "Standard RDB"}[persistenceEnabled])
+	
+	// Display connection strings
+	fmt.Println("\nConnection Strings:")
+	if requiresAuth {
+		fmt.Printf("URI: redis://:%s@localhost:%s/0\n", password, port)
+	} else {
+		fmt.Printf("URI: redis://localhost:%s/0\n", port)
+	}
+	
+	// Display example commands
+	fmt.Println("\nExample Commands:")
+	if requiresAuth {
+		fmt.Printf("CLI: redis-cli -h localhost -p %s -a %s\n", port, password)
+	} else {
+		fmt.Printf("CLI: redis-cli -h localhost -p %s\n", port)
+	}
+	
+	fmt.Printf("Ping test: redis-cli -h localhost -p %s ping\n", port)
 }
 
 func init() {
