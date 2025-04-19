@@ -1,17 +1,23 @@
-# Development Infrastructure
+# 🚀 Development Infrastructure
 
 This repository contains Docker Compose configurations for various services used for testing and development environments.
 
-## Quick Start
+## 🏁 Quick Start
 
-### Using the CLI Tool (Recommended)
+### 🔧 Using the InfraCLI Tool
 
-You can use our CLI tool to manage infrastructure services:
+You can use our CLI tool to manage infrastructure services easily:
 
 ```bash
 # Install the CLI tool
 cd infracli
 ./scripts/install.sh
+
+# List available services
+infracli list
+
+# Get connection information for a service
+infracli info mysql
 
 # Start services
 infracli run mysql
@@ -21,156 +27,71 @@ infracli run all
 # Stop services
 infracli down mysql
 infracli down all
-
-# List available services
-infracli list
 ```
 
-### Using the Shell Script
+## 🧰 Available Infrastructure
 
-Alternatively, you can use the provided shell script:
+Each service has its own detailed documentation available in its directory.
 
-```bash
-# Start a single service
-./run.sh mysql
-
-# Start multiple services
-./run.sh mongo elasticsearch-kibana
-
-# Start all available services
-./run.sh all
-```
-
-## Available Infrastructure
-
-### MongoDB
+### 🍃 MongoDB
 
 A simple MongoDB setup for development and testing purposes.
 
-#### Usage
+[📄 View MongoDB Documentation](services/mongo/README.md)
 
-```bash
-cd mongo
-docker-compose up -d
-```
-
-#### Configuration
-
-- **Port:** 27017
-- **Username:** mongo
-- **Password:** password
-- **Connection String:** mongodb://mongo:password@localhost:27017
-
-### PostgreSQL
+### 🐘 PostgreSQL
 
 A PostgreSQL setup with initialization script for development and testing.
 
-#### Usage
+[📄 View PostgreSQL Documentation](services/postgres/README.md)
 
-```bash
-cd postgres
-docker-compose up -d
-```
-
-#### Configuration
-
-- **Port:** 5432
-- **Username:** postgres
-- **Password:** postgres
-- **Default Database:** testdb (created automatically)
-- **Connection String:** postgresql://postgres:postgres@localhost:5432/testdb
-
-### MySQL
+### 🐬 MySQL
 
 A complete MySQL setup with data persistence and initialization scripts.
 
-#### Usage
+[📄 View MySQL Documentation](services/mysql/README.md)
 
-```bash
-cd mysql
-docker-compose up -d
-```
-
-#### Configuration
-
-- **Port:** 3306
-- **Root Password:** rootpassword
-- **Default Database:** testdb
-- **Default User:** mysqluser
-- **Default Password:** mysqlpassword
-- **Connection String:** mysql://mysqluser:mysqlpassword@localhost:3306/testdb
-
-### Elasticsearch and Kibana
+### 🔍 Elasticsearch and Kibana
 
 A complete setup for Elasticsearch and Kibana with data persistence.
 
-#### Usage
+[📄 View Elasticsearch & Kibana Documentation](services/elasticsearch-kibana/README.md)
 
-```bash
-cd elasticsearch-kibana
-docker-compose up -d
-```
+## 🔄 General Usage
 
-#### Configuration
+Our recommended workflow is to use the InfraCLI tool for all operations:
 
-##### Elasticsearch
-- **Port:** 9200
-- **Internal Port:** 9300
-- **Security:** Disabled for development
-- **Connection URL:** http://localhost:9200
+1. Install the InfraCLI tool (see below)
+2. Use `infracli run` to start services
+3. Use `infracli info` to get connection details
+4. Use `infracli down` to stop services when finished
 
-##### Kibana
-- **Port:** 5601
-- **Dashboard URL:** http://localhost:5601
+## 💾 Data Persistence
 
-## General Usage
+All databases are configured with named volumes to persist data between container restarts. If you need to reset the database, use `infracli down [service] --volumes` to remove the volumes as well.
 
-1. Navigate to the directory of the database you need
-2. Start the container: `docker-compose up -d`
-3. Connect to the database using the provided connection details
-4. Stop the container when finished: `docker-compose down`
+## ➕ Adding New Infrastructure
 
-### Using the run.sh Script
+Follow the pattern established in the existing directories to add configurations for additional databases as needed:
 
-The `run.sh` script provides a convenient way to start services:
+1. Create a directory for your service in `services/`
+2. Add a `docker-compose.yml` file
+3. Include a README.md with detailed usage information
+4. The CLI tool will automatically detect your new service
 
-```bash
-# Display help information
-./run.sh
+## 🛠️ InfraCLI Tool
 
-# Start one or more services
-./run.sh [service1] [service2] ... [serviceN]
-```
+The repository includes a Go-based CLI tool for efficient service management. Learn more in the [InfraCLI README](cli/README.md).
 
-To stop services, you'll still need to use the docker-compose command in each service directory:
-
-```bash
-cd [service-directory]
-docker-compose down
-```
-
-A future enhancement could include a stop capability in the script.
-
-## Data Persistence
-
-All databases are configured with named volumes to persist data between container restarts. If you need to reset the database, use `docker-compose down -v` to remove the volumes as well.
-
-## Adding New Infrastructure
-
-Follow the pattern established in the existing directories to add configurations for additional databases as needed.
-
-## InfraCLI Tool
-
-The repository includes a Go-based CLI tool for more efficient service management. Learn more in the [InfraCLI README](infracli/README.md).
-
-### Key Features
+### ✨ Key Features
 
 - Start and stop services with simple commands
+- Get connection details for any service
 - Manage multiple services at once
 - Automatic service discovery
 - Proper cleanup with volume removal option
 
-### Installation
+### 📦 Installation
 
 ```bash
 cd infracli

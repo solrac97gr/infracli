@@ -1,15 +1,16 @@
-# InfraCLI
+# 🛠️ InfraCLI
 
 A powerful command-line tool to manage Docker Compose infrastructure services.
 
-## Features
+## ✨ Features
 
 - Start and stop infrastructure services with a single command
+- Get connection information and details for any service
 - Manage multiple services at once
 - Automatic service discovery
 - Configurable via JSON configuration
 
-## Installation
+## 📦 Installation
 
 ```bash
 # Navigate to the infracli directory
@@ -21,15 +22,15 @@ cd infracli
 
 The installation script will compile the CLI tool and install it to your system.
 
-## Usage
+## 📚 Usage
 
-### List Available Services
+### 📋 List Available Services
 
 ```bash
 infracli list
 ```
 
-### Get Service Information
+### 📄 Get Service Information
 
 ```bash
 # Get connection information for a service
@@ -41,7 +42,7 @@ infracli info mongo
 infracli info elasticsearch-kibana
 ```
 
-### Start Services
+### 🚀 Start Services
 
 ```bash
 # Start a single service
@@ -54,7 +55,7 @@ infracli run mysql mongo
 infracli run all
 ```
 
-### Stop Services
+### 🛑 Stop Services
 
 ```bash
 # Stop a single service
@@ -70,7 +71,7 @@ infracli down all
 infracli down mysql --volumes
 ```
 
-### Verbose Output
+### 🔍 Verbose Output
 
 Add the `-v` or `--verbose` flag to get detailed output:
 
@@ -78,7 +79,7 @@ Add the `-v` or `--verbose` flag to get detailed output:
 infracli run mysql -v
 ```
 
-## Uninstallation
+## 🗑️ Uninstallation
 
 To remove the InfraCLI tool:
 
@@ -90,7 +91,7 @@ cd infracli
 ./scripts/uninstall.sh
 ```
 
-## Configuration
+## ⚙️ Configuration
 
 The tool uses a `config.json` file located in the `config` directory. This file specifies:
 
@@ -106,7 +107,7 @@ Default configuration:
 }
 ```
 
-## Development
+## 💻 Development
 
 This tool is built using Go with the Cobra CLI framework. To contribute:
 
