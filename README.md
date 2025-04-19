@@ -45,6 +45,12 @@ A PostgreSQL setup with initialization script for development and testing.
 
 [📄 View PostgreSQL Documentation](services/postgres/README.md)
 
+### 🔴 Redis
+
+A Redis setup with persistence for development and caching needs.
+
+[📄 View Redis Documentation](services/redis/README.md)
+
 ### 🐬 MySQL
 
 A complete MySQL setup with data persistence and initialization scripts.
