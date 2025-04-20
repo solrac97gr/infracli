@@ -63,6 +63,12 @@ A complete setup for Elasticsearch and Kibana with data persistence.
 
 [📄 View Elasticsearch & Kibana Documentation](services/elasticsearch-kibana/README.md)
 
+### 🔄 Neo4j
+
+A complete Neo4j graph database setup for development and testing purposes.
+
+[📄 View Neo4j Documentation](services/neo4j/README.md)
+
 ## 🔄 General Usage
 
 Our recommended workflow is to use the InfraCLI tool for all operations:
