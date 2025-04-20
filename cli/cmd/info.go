@@ -270,6 +270,8 @@ Examples:
 			displayRedisInfo(composeContent)
 		case "elasticsearch-kibana":
 			displayElasticsearchKibanaInfo(composeContent)
+		case "neo4j":
+			displayNeo4jInfo(composeContent)
 		default:
 			// Generic display for other services
 			displayGenericInfo(serviceName, composeContent)
@@ -679,6 +681,100 @@ func displayRedisInfo(content string) {
 	}
 	
 	fmt.Printf("Ping test: redis-cli -h localhost -p %s ping\n", port)
+}
+
+func displayNeo4jInfo(content string) {
+	// Extract service information
+	services := extractImageAndServices(content)
+	
+	// Find the Neo4j service
+	var neo4jServiceName string
+	for name, image := range services {
+		if strings.Contains(strings.ToLower(image), "neo4j") {
+			neo4jServiceName = name
+			break
+		}
+	}
+	
+	if neo4jServiceName == "" {
+		fmt.Println("Neo4j service not found in docker-compose.yml")
+		return
+	}
+	
+	// Extract ports for Neo4j service
+	servicePrefix := "  " + neo4jServiceName + ":"
+	ports := extractPorts(content, servicePrefix)
+	
+	// Find Neo4j ports
+	var httpPort string = "7474" // Default HTTP port
+	var boltPort string = "7687" // Default Bolt port
+	var httpsPort string = "7473" // Default HTTPS port
+	
+	for _, portMapping := range ports {
+		if strings.Contains(portMapping, "7474") {
+			parts := strings.Split(portMapping, ":")
+			if len(parts) == 2 {
+				httpPort = strings.TrimSpace(parts[0])
+			}
+		} else if strings.Contains(portMapping, "7687") {
+			parts := strings.Split(portMapping, ":")
+			if len(parts) == 2 {
+				boltPort = strings.TrimSpace(parts[0])
+			}
+		} else if strings.Contains(portMapping, "7473") {
+			parts := strings.Split(portMapping, ":")
+			if len(parts) == 2 {
+				httpsPort = strings.TrimSpace(parts[0])
+			}
+		}
+	}
+	
+	// Extract environment variables
+	env := extractEnvironment(content, servicePrefix)
+	
+	// Get database credentials
+	authInfo := env["NEO4J_AUTH"]
+	var user, password string
+	
+	if authInfo != "" {
+		// Default format is neo4j/password
+		parts := strings.Split(authInfo, "/")
+		if len(parts) == 2 {
+			user = parts[0]
+			password = parts[1]
+		} else {
+			user = "neo4j" // Default username
+			password = "neo4j" // Default password when authentication is enabled
+		}
+	} else {
+		user = "neo4j" // Default username
+		password = "(disabled)" // If NEO4J_AUTH not set or empty
+	}
+	
+	// Display Neo4j connection information
+	fmt.Println("Neo4j Connection Information:")
+	fmt.Println(strings.Repeat("-", 40))
+	fmt.Printf("Host: localhost\n")
+	fmt.Printf("HTTP Port: %s\n", httpPort)
+	fmt.Printf("Bolt Port: %s\n", boltPort)
+	fmt.Printf("HTTPS Port: %s\n", httpsPort)
+	fmt.Printf("Username: %s\n", user)
+	fmt.Printf("Password: %s\n", password)
+	
+	// Display connection strings
+	fmt.Println("\nConnection Information:")
+	fmt.Printf("Browser UI: http://localhost:%s\n", httpPort)
+	fmt.Printf("Bolt URI: bolt://localhost:%s\n", boltPort)
+	fmt.Printf("HTTPS UI: https://localhost:%s\n", httpsPort)
+	
+	// Display cypher-shell command
+	fmt.Println("\nConnect with Cypher Shell:")
+	fmt.Printf("cypher-shell -a bolt://localhost:%s -u %s -p %s\n", boltPort, user, password)
+	
+	// Display Docker connection commands
+	fmt.Println("\nDocker Commands:")
+	fmt.Printf("Cypher Shell: docker exec -it neo4j cypher-shell -u %s -p %s\n", user, password)
+	fmt.Printf("Interactive Shell: docker exec -it neo4j bash\n")
 }
 
 func init() {
